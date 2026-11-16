@@ -15,22 +15,34 @@ on:
 jobs:
   build:
     name: Build unsigned IPA
-    runs-on: macos-14
+    # NOTE (2026-11-16): runs-on: macos-14 was rejected by GitHub
+    # with "The configuration 'macos-14-arm64-us-default' is not
+    # supported" -- both runs were cancelled in ~2s with no runner
+    # assigned. macos-15 works and still ships Xcode 16.x.
+    runs-on: macos-15
     steps:
       - name: Check out
         uses: actions/checkout@v4
 
-      # Xcode 15.4 targets iOS 16.0 and ships Swift 5.10, which is
+      # Xcode 16.2 targets iOS 16.0 and ships Swift 6.0, which is
       # all this project needs. Do NOT use Xcode 26 here: the
       # original 1.0.1 crash was caused by symbols that a newer
       # SDK links against but iOS 16.4.1 does not provide.
-      - name: Select Xcode 15.4
+      - name: Select Xcode 16.2
         run: |
           ls /Applications | grep -i xcode || true
-          if [ -d /Applications/Xcode_15.4.app ]; then
-            sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
-          elif [ -d /Applications/Xcode_16.2.app ]; then
+          if [ -d /Applications/Xcode_16.2.app ]; then
             sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.3.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.3.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.4.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.1.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          else
+            for d in /Applications/Xcode_16*.app; do
+              [ -d "$d" ] && sudo xcode-select -s "$d/Contents/Developer" && break
+            done
           fi
           xcodebuild -version
           swift --version
