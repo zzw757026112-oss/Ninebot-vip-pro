@@ -31,7 +31,7 @@ enum FrameScaler {
             let offsetY = (targetHeight - scaled.extent.height) / 2
             let translated = scaled.transformed(by: CGAffineTransform(translationX: offsetX, y: offsetY))
             let background = CIImage(color: .black).cropped(to: CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight))
-            return background.composited(over: translated)
+            return translated.composited(over: background)
         case .fill:
             let scale = max(targetWidth / source.width, targetHeight / source.height)
             let scaled = image.transformed(by: CGAffineTransform(scaleX: scale, y: scale))
