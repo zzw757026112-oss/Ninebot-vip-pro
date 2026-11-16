@@ -1,0 +1,8 @@
+# Xcode / build output — never commit these.
+build/
+DerivedData/
+*.xcuserdata/
+*.xcuserstate
+.DS_Store
+# The unsigned IPA is produced by CI; keep the repo source-only.
+*.ipa
