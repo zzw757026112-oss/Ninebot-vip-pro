@@ -82,9 +82,14 @@ lines.append(f"\t\t{IDS['product']} /* NinebotPro.app */ = {{isa = PBXFileRefere
 lines.append(f"\t\t{IDS['frameworks_phase']} /* Frameworks */ = {{isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; }};")
 
 # --- PBXGroup ---
-lines.append(f"\t\t{IDS['main_group']} = {{isa = PBXGroup; children = ({IDS['app_group']}, {IDS['product_group']}); sourceTree = \"<group>\"; }};")
+lines.append(f"\t\t{IDS['main_group']} = {{isa = PBXGroup; children = ({IDS['assets_ref']}, {IDS['app_group']}, {IDS['product_group']}); sourceTree = \"<group>\"; }};")
 lines.append(f"\t\t{IDS['product_group']} = {{isa = PBXGroup; children = ({IDS['product']}); name = Products; sourceTree = \"<group>\"; }};")
-app_children = ([IDS['assets_ref'], IDS['info_ref']]
+# NOTE: Assets.xcassets lives at the project root (NinebotPro/Assets.xcassets),
+# NOT inside NinebotPro/NinebotPro/, so it must be a child of the main group.
+# (It was previously a child of the app group, which made Xcode resolve it to
+# NinebotPro/NinebotPro/Assets.xcassets -- a path that does not exist -- and
+# fail the build with "Build input file cannot be found".)
+app_children = ([IDS['info_ref']]
               + [group_id[f] for f in folders if f != "NinebotPro"]
               + [uuid('PBXFileReference ' + p) for p in swift_files if os.path.dirname(p) == "NinebotPro"])
 lines.append(f"\t\t{IDS['app_group']} = {{isa = PBXGroup; children = ({', '.join(app_children)}); path = NinebotPro; sourceTree = \"<group>\"; }};")
@@ -131,6 +136,8 @@ project_common = {
     "MARKETING_VERSION": "1.1.0",
     "PRODUCT_BUNDLE_IDENTIFIER": "com.hanlin.ninebotpro",
     "PRODUCT_NAME": '"$(TARGET_NAME)"',
+    "SDKROOT": "iphoneos",
+    "SUPPORTED_PLATFORMS": "iphoneos",
     "SWIFT_VERSION": "5.0",
     "TARGETED_DEVICE_FAMILY": '"1,2"',
 }
@@ -146,6 +153,8 @@ target_common = {
     "LD_RUNPATH_SEARCH_PATHS": '"$(inherited) @executable_path/Frameworks"',
     "PRODUCT_BUNDLE_IDENTIFIER": "com.hanlin.ninebotpro",
     "PRODUCT_NAME": '"$(TARGET_NAME)"',
+    "SDKROOT": "iphoneos",
+    "SUPPORTED_PLATFORMS": "iphoneos",
     "SWIFT_VERSION": "5.0",
     "TARGETED_DEVICE_FAMILY": '"1,2"',
 }
