@@ -1,0 +1,78 @@
+# Build the Ninebot Pro clean-room rebuild on a GitHub-hosted macOS
+# runner and produce an unsigned IPA. No Mac, no signing identity,
+# no certificates and no secrets are needed on the user's side.
+#
+# Trigger: on every push, or manually from the Actions tab
+# (workflow_dispatch). The built IPA is uploaded as a workflow
+# artifact; download it from the completed run and self-sign it
+# on your own device, exactly like the original 1.0.1 IPA.
+name: Build iOS (unsigned IPA)
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build unsigned IPA
+    runs-on: macos-14
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      # Xcode 15.4 targets iOS 16.0 and ships Swift 5.10, which is
+      # all this project needs. Do NOT use Xcode 26 here: the
+      # original 1.0.1 crash was caused by symbols that a newer
+      # SDK links against but iOS 16.4.1 does not provide.
+      - name: Select Xcode 15.4
+        run: |
+          ls /Applications | grep -i xcode || true
+          if [ -d /Applications/Xcode_15.4.app ]; then
+            sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+          elif [ -d /Applications/Xcode_16.2.app ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          fi
+          xcodebuild -version
+          swift --version
+
+      - name: Build (Release, no signing)
+        run: |
+          xcodebuild \
+            -project NinebotPro/NinebotPro.xcodeproj \
+            -scheme NinebotPro \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Verify the built app targets iOS 16.0
+        run: |
+          APP="build/DerivedData/Build/Products/Release-iphoneos/NinebotPro.app"
+          test -d "$APP" || { echo "Built app not found at $APP"; exit 1; }
+          MIN_OS=$(/usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$APP/Info.plist")
+          test "$MIN_OS" = "16.0" || { echo "MinimumOSVersion is $MIN_OS, expected 16.0"; exit 1; }
+          /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$APP/Info.plist"
+
+      - name: Package unsigned IPA
+        run: |
+          APP="build/DerivedData/Build/Products/Release-iphoneos/NinebotPro.app"
+          rm -rf Payload ninebot-pro-ios16-rebuild-unsigned.ipa
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -r -y ninebot-pro-ios16-rebuild-unsigned.ipa Payload
+          rm -rf Payload
+          ls -lh ninebot-pro-ios16-rebuild-unsigned.ipa
+          shasum -a 256 ninebot-pro-ios16-rebuild-unsigned.ipa | tee SHA256SUMS.txt
+          unzip -l ninebot-pro-ios16-rebuild-unsigned.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ninebot-pro-ios16-rebuild-unsigned-ipa
+          path: |
+            ninebot-pro-ios16-rebuild-unsigned.ipa
+            SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
