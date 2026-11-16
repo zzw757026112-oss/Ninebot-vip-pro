@@ -52,9 +52,9 @@
 		B1BCC0924A704C2F717DA186 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5313DD1C4E1C20F4A3C67B6B /* NinebotPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NinebotPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FF55970AA822286C6B966AD /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		730860D111F767D18B98AEDD = {isa = PBXGroup; children = (AEDEACFBC02922194D7F86CB, F35DF5A89485BA60DBB90A4F); sourceTree = "<group>"; };
+		730860D111F767D18B98AEDD = {isa = PBXGroup; children = (B44EA3774057F863247CEADE, AEDEACFBC02922194D7F86CB, F35DF5A89485BA60DBB90A4F); sourceTree = "<group>"; };
 		F35DF5A89485BA60DBB90A4F = {isa = PBXGroup; children = (5313DD1C4E1C20F4A3C67B6B); name = Products; sourceTree = "<group>"; };
-		AEDEACFBC02922194D7F86CB = {isa = PBXGroup; children = (B44EA3774057F863247CEADE, B1BCC0924A704C2F717DA186, 57C19CB0E8B88BD105A5EEE3, D2C86FD856B90B942C4FD963, 329249AD6A85A10FC0C4ED44, F7E57A7FB587DB0040F51D17, 69302BD40ADAA104E8C6D2F8, 62F4F6817EEB515A484847BA); path = NinebotPro; sourceTree = "<group>"; };
+		AEDEACFBC02922194D7F86CB = {isa = PBXGroup; children = (B1BCC0924A704C2F717DA186, 57C19CB0E8B88BD105A5EEE3, D2C86FD856B90B942C4FD963, 329249AD6A85A10FC0C4ED44, F7E57A7FB587DB0040F51D17, 69302BD40ADAA104E8C6D2F8, 62F4F6817EEB515A484847BA); path = NinebotPro; sourceTree = "<group>"; };
 		57C19CB0E8B88BD105A5EEE3 = {isa = PBXGroup; children = (F118F80893AC2C38FB8B479C, A9F809E83D0CF13B9224D1F2, 185415856B428E0BC0F5B78F, A9ABACF1D5848CDCAAA4EEB2); name = Models; path = Models; sourceTree = "<group>"; };
 		D2C86FD856B90B942C4FD963 = {isa = PBXGroup; children = (256746B5FCC9E4F43368B85B, 365ABAA1F5BE7A7EB71E0537); name = Services; path = Services; sourceTree = "<group>"; };
 		329249AD6A85A10FC0C4ED44 = {isa = PBXGroup; children = (1F2411ECFB442C2FF4B51397, 1DF85A00420BC311B10879C6, AC94B2D51E1791904E300F2C, 1013D38DBBB05F2137751F32); name = Sources; path = Sources; sourceTree = "<group>"; };
@@ -80,6 +80,8 @@
 			MARKETING_VERSION = 1.1.0;
 			PRODUCT_BUNDLE_IDENTIFIER = com.hanlin.ninebotpro;
 			PRODUCT_NAME = "$(TARGET_NAME)";
+			SDKROOT = iphoneos;
+			SUPPORTED_PLATFORMS = iphoneos;
 			SWIFT_VERSION = 5.0;
 			TARGETED_DEVICE_FAMILY = "1,2";
 			SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -100,6 +102,8 @@
 			MARKETING_VERSION = 1.1.0;
 			PRODUCT_BUNDLE_IDENTIFIER = com.hanlin.ninebotpro;
 			PRODUCT_NAME = "$(TARGET_NAME)";
+			SDKROOT = iphoneos;
+			SUPPORTED_PLATFORMS = iphoneos;
 			SWIFT_VERSION = 5.0;
 			TARGETED_DEVICE_FAMILY = "1,2";
 		}; name = Release; };
@@ -112,6 +116,8 @@
 			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			PRODUCT_BUNDLE_IDENTIFIER = com.hanlin.ninebotpro;
 			PRODUCT_NAME = "$(TARGET_NAME)";
+			SDKROOT = iphoneos;
+			SUPPORTED_PLATFORMS = iphoneos;
 			SWIFT_VERSION = 5.0;
 			TARGETED_DEVICE_FAMILY = "1,2";
 			SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -125,6 +131,8 @@
 			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 			PRODUCT_BUNDLE_IDENTIFIER = com.hanlin.ninebotpro;
 			PRODUCT_NAME = "$(TARGET_NAME)";
+			SDKROOT = iphoneos;
+			SUPPORTED_PLATFORMS = iphoneos;
 			SWIFT_VERSION = 5.0;
 			TARGETED_DEVICE_FAMILY = "1,2";
 		}; name = Release; };
